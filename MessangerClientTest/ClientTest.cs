@@ -15,7 +15,7 @@ namespace MessangerClientTest
         public void ClientListenerConsoleAnswerTest()
         {
             // Arrange
-            NetMessage messagAnswer = new NetMessage() { Text = "Тестовый ответ", NickNameFrom = "Тестовый акаунт"};
+            NetMessage messagAnswer = new NetMessage() { Text = "Test answer", NickNameFrom = "TestName"};
             string adress = "127.0.0.1";
             IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Parse(adress), 12345);
             UdpClient udpClient = new UdpClient(12346);
@@ -32,7 +32,7 @@ namespace MessangerClientTest
 
             // Assert
             string actual = output.ToString();
-            Assert.Equal($"Получено сообщение от Тестовый акаунт:\r\nТестовый ответ\r\n", actual);
+            Assert.Equal($"Received a message from TestName:\r\nTest answer\r\n", actual);
             Console.SetOut(old);
         }
     }

@@ -30,14 +30,14 @@ namespace MessangerClient
                 try
                 {
                     var messageReceived = _messageSouce.Receive(ref _remoteEndPoint, _udpClient);
-                    Console.WriteLine($"Получено сообщение от {messageReceived.NickNameFrom}:");
+                    Console.WriteLine($"Received a message from {messageReceived.NickNameFrom}:");
                     Console.WriteLine(messageReceived.Text);
 
                     Confirm(messageReceived, _remoteEndPoint);
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Ошибка при получении сообщения" + ex.Message);
+                    Console.WriteLine("Error receiving the message" + ex.Message);
                 }
         }
         public void Confirm(NetMessage message, IPEndPoint remoteEndPoint)
