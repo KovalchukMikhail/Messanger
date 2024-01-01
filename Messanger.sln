@@ -7,7 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messanger", "Messanger\Mess
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessangerClient", "MessangerClient\MessangerClient.csproj", "{638F2379-8583-4454-83B6-9892E45732B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessangerClientTest", "MessangerClientTest\MessangerClientTest.csproj", "{8F367218-7444-46F2-9932-27A3F77933CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessangerClientTest", "MessangerClientTest\MessangerClientTest.csproj", "{8F367218-7444-46F2-9932-27A3F77933CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatCommon", "ChatCommon\ChatCommon.csproj", "{3730594B-71A9-49C3-A632-24437040B4B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatDb", "ChatDb\ChatDb.csproj", "{44DFE571-72A7-433A-91BD-07C42C6AB0B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatNetwork", "ChatNetwork\ChatNetwork.csproj", "{F0626F3E-D126-46C8-A3AF-DF3900D85966}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +33,18 @@ Global
 		{8F367218-7444-46F2-9932-27A3F77933CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F367218-7444-46F2-9932-27A3F77933CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F367218-7444-46F2-9932-27A3F77933CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3730594B-71A9-49C3-A632-24437040B4B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3730594B-71A9-49C3-A632-24437040B4B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3730594B-71A9-49C3-A632-24437040B4B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3730594B-71A9-49C3-A632-24437040B4B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44DFE571-72A7-433A-91BD-07C42C6AB0B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44DFE571-72A7-433A-91BD-07C42C6AB0B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44DFE571-72A7-433A-91BD-07C42C6AB0B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44DFE571-72A7-433A-91BD-07C42C6AB0B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0626F3E-D126-46C8-A3AF-DF3900D85966}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0626F3E-D126-46C8-A3AF-DF3900D85966}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0626F3E-D126-46C8-A3AF-DF3900D85966}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0626F3E-D126-46C8-A3AF-DF3900D85966}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

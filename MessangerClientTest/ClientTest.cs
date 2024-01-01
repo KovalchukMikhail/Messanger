@@ -1,5 +1,5 @@
-using Messanger.Abstracts;
-using Messanger.Models;
+using ChatCommon;
+using ChatCommon.Interfaces;
 using MessangerClient;
 using Moq;
 using System.Net;

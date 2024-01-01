@@ -1,6 +1,5 @@
-﻿using Messanger.Abstracts;
-using Messanger.Models;
-using Messanger.Services;
+﻿using ChatCommon;
+using ChatCommon.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,7 +72,6 @@ namespace MessangerClient
                     Console.WriteLine("Ошибка при обработке сообщения" + ex.Message);
                 }
             }
-            
         }
         public void Start()
         {

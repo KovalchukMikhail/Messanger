@@ -1,5 +1,4 @@
-﻿using Messanger.Abstracts;
-using Messanger.Services;
+﻿using ChatNetwork;
 using System.Net;
 using System.Net.Sockets;
 

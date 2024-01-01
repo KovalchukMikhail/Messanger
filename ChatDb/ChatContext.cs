@@ -1,6 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ChatDb.Models;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Emit;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Messanger.Models
+namespace ChatDb
 {
     public class ChatContext : DbContext
     {
@@ -20,7 +27,7 @@ namespace Messanger.Models
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Server=.; Database=MyGB;Integrated Security=False;TrustServerCertificate=True; Trusted_Connection=True;")
-                .UseLazyLoadingProxies();
+            .UseLazyLoadingProxies();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

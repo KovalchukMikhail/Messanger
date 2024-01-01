@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Messanger.Models
+namespace ChatDb.Models
 {
     public class User
     {
@@ -12,6 +12,5 @@ namespace Messanger.Models
         public virtual List<Message>? MessagesFrom { get; set; } = new();
         public int Id { get; set; }
         public string? FullName { get; set; }
-
     }
 }
