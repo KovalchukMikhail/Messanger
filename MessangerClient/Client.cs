@@ -1,5 +1,7 @@
 ﻿using ChatCommon;
 using ChatCommon.Interfaces;
+using NetMQ;
+using NetMQ.Sockets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,28 +18,31 @@ namespace MessangerClient
         private readonly IMessageSource _messageSouce;
         private IPEndPoint _remoteEndPoint;
         private UdpClient _udpClient;
+        private string UserIp;
+        private string UserPort;
         public Client(string name, ref IPEndPoint remoteEndPoint, IMessageSource messageSouce, UdpClient udpClient)
         {
             _name = name;
             _messageSouce = messageSouce;
             _remoteEndPoint = remoteEndPoint;
             _udpClient = udpClient;
+            UserIp = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString();
+            UserPort = ((IPEndPoint)udpClient.Client.LocalEndPoint).Port.ToString();
         }
         
         public void ClientListener()
         {
-                try
-                {
-                    var messageReceived = _messageSouce.Receive(ref _remoteEndPoint, _udpClient);
-                    Console.WriteLine($"Received a message from {messageReceived.NickNameFrom}:");
-                    Console.WriteLine(messageReceived.Text);
-
-                    Confirm(messageReceived, _remoteEndPoint);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Error receiving the message" + ex.Message);
-                }
+            try
+            {
+                IPEndPoint endPoint = GetEndPoint();
+                var messageReceived = _messageSouce.Receive(ref endPoint, _udpClient);
+                Console.WriteLine($"Received a message from {messageReceived.NickNameFrom}:");
+                Console.WriteLine(messageReceived.Text);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error receiving the message" + ex.Message);
+            }
         }
         public void Confirm(NetMessage message, IPEndPoint remoteEndPoint)
         {
@@ -47,13 +52,14 @@ namespace MessangerClient
         }
         public void Register(ref IPEndPoint remoteEndPoint)
         {
-            IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 12346);
-            var message = new NetMessage() { NickNameFrom = _name, NickNameTo = null, Command = Command.Register };
+            IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5556);
+            var message = new NetMessage() { NickNameFrom = _name, NickNameTo = null, Command = Command.Register, IpUser = UserIp, PortUser = UserPort};
             _messageSouce.Send(message, ref remoteEndPoint, _udpClient);
         }
         public void ClientSender()
         {
-            Register(ref _remoteEndPoint);
+            IPEndPoint endPoint = GetEndPoint();
+            Register(ref endPoint);
             while(true)
             {
                 try
@@ -62,8 +68,9 @@ namespace MessangerClient
                     string nameTo = Console.ReadLine();
                     Console.WriteLine("Введите сообщение и нажмите Enter: ");
                     var text = Console.ReadLine();
-                    var message = new NetMessage() { Command = Command.Message, NickNameFrom = _name, NickNameTo = nameTo, Text = text };
-                    _messageSouce.Send(message, ref _remoteEndPoint, _udpClient);
+                    var message = new NetMessage() { Command = Command.Message, NickNameFrom = _name, NickNameTo = nameTo, Text = text, IpUser = UserIp, PortUser = UserPort };
+                    endPoint = GetEndPoint();
+                    _messageSouce.Send(message, ref endPoint, _udpClient);
                     Console.WriteLine("Сообщение отправлено");
                     ClientListener();
                 }
@@ -75,7 +82,12 @@ namespace MessangerClient
         }
         public void Start()
         {
-            ClientSender();    
+            ClientSender();
+        }
+
+        public IPEndPoint GetEndPoint()
+        {
+            return new IPEndPoint(_remoteEndPoint.Address, _remoteEndPoint.Port);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Messanger.Services;
+﻿using ChatNetwork;
+using Messanger.Services;
 
 namespace Messanger
 {
@@ -6,7 +7,7 @@ namespace Messanger
     {
         static void Main(string[] args)
         {
-            Server server = new Server();
+            Server server = new Server(new NetMqMessageSource());
             server.Start();
         }
     }

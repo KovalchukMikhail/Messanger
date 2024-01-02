@@ -26,7 +26,7 @@ namespace ChatDb
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=.; Database=MyGB;Integrated Security=False;TrustServerCertificate=True; Trusted_Connection=True;")
+            optionsBuilder.UseSqlServer(@"Server=.; Database=NetMQ;Integrated Security=False;TrustServerCertificate=True; Trusted_Connection=True;")
             .UseLazyLoadingProxies();
         }
 

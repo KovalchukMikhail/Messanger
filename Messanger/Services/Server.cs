@@ -3,6 +3,8 @@ using ChatCommon.Interfaces;
 using ChatDb;
 using ChatDb.Models;
 using ChatNetwork;
+using NetMQ;
+using NetMQ.Sockets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,13 +17,12 @@ namespace Messanger.Services
 {
     public class Server
     {
-        Dictionary<string, IPEndPoint> clients = new Dictionary<string, IPEndPoint>();
         IPEndPoint ep;
         private readonly IMessageSource _messageSouce;
-        UdpClient udpClient = new UdpClient(12345);
-        public Server()
+        UdpClient udpClient = new UdpClient(5556);
+        public Server(IMessageSource messageSource)
         {
-            _messageSouce = new UdpMessageSource();
+            _messageSouce = messageSource;
             ep = new IPEndPoint(IPAddress.Any, 0);
 
         }
@@ -33,41 +34,42 @@ namespace Messanger.Services
         private void Register(NetMessage message, ref IPEndPoint ep)
         {
             Console.WriteLine($"Message Register name = {message.NickNameFrom}");
-            if(clients.TryAdd(message.NickNameFrom, ep))
+            using(ChatContext context = new ChatContext())
             {
-                using(ChatContext context = new ChatContext())
+                if(context.Users.FirstOrDefault(u => u.FullName == message.NickNameFrom) == null)
                 {
-                    context.Users.Add(new User() { FullName = message.NickNameFrom });
+                    context.Users.Add(new User() { FullName = message.NickNameFrom, IpAddress = message.IpUser, Port = message.PortUser });
                     context.SaveChangesAsync();
                 }
             }
         }
         private void RelyMessage(NetMessage message, ref IPEndPoint ep)
         {
-            if(clients.TryGetValue(message.NickNameTo, out IPEndPoint epTo))
+            int? id = 0;
+            using (var context = new ChatContext())
             {
-                int? id = 0;
-                using (var ctx = new ChatContext())
+                User toUser = context.Users.FirstOrDefault(u => u.FullName == message.NickNameTo);
+                if (toUser != null)
                 {
-                    var fromUser = ctx.Users.First(x => x.FullName == message.NickNameFrom);
-                    var toUser = ctx.Users.First(x => x.FullName == message.NickNameTo);
+                    var fromUser = context.Users.First(x => x.FullName == message.NickNameFrom);
                     var msg = new Message() { UserFrom = fromUser, UserTo = toUser, IsSent = false, Text = message.Text };
-                    ctx.Messages.Add(msg);
-                    ctx.SaveChanges();
+                    context.Messages.Add(msg);
+                    context.SaveChanges();
                     id = msg.MessageId;
+
+                    IPEndPoint epTo = new IPEndPoint(IPAddress.Parse(toUser.IpAddress), Convert.ToInt32(toUser.Port));
+                    message.Id = id;
+                    _messageSouce.Send(message, ref epTo, udpClient);
+
+                    Console.WriteLine($"Message Relied, from = {message.NickNameFrom} to = {message.NickNameTo}");
                 }
-                message.Id = id;
-                _messageSouce.Send(message, ref epTo, udpClient);
-
-                Console.WriteLine($"Message Relied, from = {message.NickNameFrom} to = {message.NickNameTo}");
+                else
+                {
+                    NetMessage answer = new NetMessage() { Text = "Пользователь не найден." };
+                    Console.WriteLine("Пользователь не найден.");
+                    _messageSouce.Send(answer, ref ep, udpClient);
+                }
             }
-            else
-            {
-                NetMessage answer = new NetMessage() { Text = "Пользователь не найден." };
-                Console.WriteLine("Пользователь не найден.");
-                _messageSouce.Send(answer, ref ep, udpClient);
-            }
-
         }
         void ConfirmMessageReceived(int? id, ref IPEndPoint ep)
         {
@@ -104,7 +106,7 @@ namespace Messanger.Services
                     Console.WriteLine(message);
                     ProcessMessage(message, ref ep);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
 
                 }

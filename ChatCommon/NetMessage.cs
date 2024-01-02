@@ -14,7 +14,8 @@ namespace ChatCommon
         public DateTime DateTime { get; set; }
         public string? NickNameFrom { get; set; }
         public string? NickNameTo { get; set; }
-        public string EndPoint { get; set; }
+        public string IpUser { get; set; }
+        public string PortUser { get; set; }
 
         public Command Command { get; set; }
 
